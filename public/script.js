@@ -4,11 +4,7 @@ const screenCapture = document.getElementById('capture');
 const start = document.getElementById('share_screen');
 const capt = document.getElementById('capt');
 
-const peer = new Peer(undefined, {
-    path: '/peerjs',
-    host: '/',
-    port: '4040'
-});
+const peer = new Peer();
 
 let screenShareStream;
 
