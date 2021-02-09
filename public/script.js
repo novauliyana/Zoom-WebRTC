@@ -7,7 +7,7 @@ const capt = document.getElementById('capt');
 const peer = new Peer(undefined, {
     path: '/peerjs',
     host: '/',
-    port: '443'
+    port: '4040'
 });
 
 let screenShareStream;
@@ -29,6 +29,7 @@ navigator.mediaDevices.getUserMedia({
         call.on('stream', userVideoStream => {
             addVideoStream(video, userVideoStream);
         })
+        console.log(err);
     })
 
     socket.on('user-connected', userId => {
@@ -77,7 +78,7 @@ socket.on('user-disconnected', userId => {
 
 peer.on('open', id => {
     socket.emit('join-room', ROOM_ID, id);
-    console.log(id)
+    console.log('id ', id)
 })
 
 
