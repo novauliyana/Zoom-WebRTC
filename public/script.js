@@ -7,7 +7,7 @@ const capt = document.getElementById('capt');
 const peer = new Peer(undefined, {
     path: '/peerjs',
     host: '/',
-    port: '443'
+    port: '80'
 });
 
 let screenShareStream;
