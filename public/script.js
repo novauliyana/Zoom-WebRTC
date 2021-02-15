@@ -14,7 +14,7 @@ let screenShareStream;
 
 let myVideoStream;
 const myVideo = document.createElement('video');
-myVideo.muted = true;
+myVideo.muted = false;
 const peers = {}
 
 navigator.mediaDevices.getUserMedia({
@@ -40,7 +40,7 @@ navigator.mediaDevices.getUserMedia({
     //input
     let text = $('input')
     //press enter
-    $('html').keydown((e) => {
+    $('html').keydown(function (e) {
         if (e.which == 13 && text.val().length !== 0) {
             console.log(text.val())
             socket.emit('message', text.val());
@@ -82,7 +82,7 @@ peer.on('open', id => {
 })
 
 
-const connecToNewUser = (userId, stream) => {
+function connecToNewUser(userId, stream) {
     const call = peer.call(userId, stream)
     const video = document.createElement('video')
     call.on('stream', userVideoStream => {
@@ -96,7 +96,7 @@ const connecToNewUser = (userId, stream) => {
     peers[userId] = call
 }
 
-const addVideoStream = (video, stream) => {
+function addVideoStream(video, stream) {
 
     video.srcObject = stream;
     video.addEventListener('loadedmetadata', () => {
