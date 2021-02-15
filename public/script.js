@@ -4,11 +4,7 @@ const screenCapture = document.getElementById('capture');
 const start = document.getElementById('share_screen');
 const capt = document.getElementById('capt');
 
-const peer = new Peer(undefined, {
-    path: '/peerjs',
-    host: '/',
-    port: '4040'
-});
+var peer = new Peer();
 
 let screenShareStream;
 
@@ -29,7 +25,6 @@ navigator.mediaDevices.getUserMedia({
         call.on('stream', userVideoStream => {
             addVideoStream(video, userVideoStream);
         })
-        console.log(err);
     })
 
     socket.on('user-connected', userId => {
