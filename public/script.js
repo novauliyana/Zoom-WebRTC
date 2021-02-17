@@ -10,7 +10,7 @@ let screenShareStream;
 
 let myVideoStream;
 const myVideo = document.createElement('video');
-myVideo.muted = false;
+myVideo.muted = true;
 const peers = {}
 
 navigator.mediaDevices.getUserMedia({
@@ -51,20 +51,20 @@ navigator.mediaDevices.getUserMedia({
 })
 
 
-var displayMediaOptions = {
-    video: {
-        cursor: 'always'
-    },
-    audio: true
-}
+// var displayMediaOptions = {
+//     video: {
+//         cursor: 'always'
+//     },
+//     audio: true
+// }
 
-start.addEventListener("click", function (e) {
-    startCapture();
-}, false)
+// start.addEventListener("click", function (e) {
+//     startCapture();
+// }, false)
 
-async function startCapture() {
-    capt.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
-}
+// async function startCapture() {
+//     capt.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+// }
 
 socket.on('user-disconnected', userId => {
     if (peers[userId]) peers[userId].close()
@@ -116,6 +116,71 @@ const muteUnmute = () => {
     }
 }
 
+
+const playStop = () => {
+    let enabled = myVideoStream.getVideoTracks()[0].enabled;
+    if (enabled) {
+        myVideoStream.getVideoTracks()[0].enabled = false;
+        setPlayVideo()
+    } else {
+        setStopVideo()
+        myVideoStream.getVideoTracks()[0].enabled = true;
+    }
+}
+
+
+const shareScreen = async () => {
+    const socket = io('/')
+    const videoGrid = document.getElementById('video-grid')
+    var myPeer = new Peer()
+    const peers = {}
+    navigator.mediaDevices.getDisplayMedia({
+        video: true,
+        audio: true
+    }).then(stream => {
+        myPeer.on('call', call => {
+            call.answer(stream)
+            call.on('stream', userVideoStream => {
+                addVideoStream(userVideoStream)
+            })
+        })
+
+        socket.on('user-connected', userId => {
+            connectToNewUser(userId, stream)
+        })
+
+
+    })
+
+    socket.on('user-disconnected', userId => {
+        if (peers[userId]) peers[userId].close()
+    })
+
+    myPeer.on('open', id => {
+        socket.emit('join-room', ROOM_ID, id)
+    })
+
+    function connectToNewUser(userId, stream) {
+
+        const call = myPeer.call(userId, stream)
+        const video2 = document.createElement('video')
+
+        call.on('close', () => {
+            video2.remove()
+        })
+
+        peers[userId] = call
+    }
+
+    function addVideoStream(video2, stream) {
+        video2.srcObject = stream
+        video2.addEventListener('loadedmetadata', () => {
+            video2.play()
+        })
+        videoGrid.append(video2)
+    }
+};
+
 const setMuteButton = () => {
     const html = `
     <i class="fas fa-volume-up"></i
@@ -131,18 +196,6 @@ const setUnmuteButton = () => {
     `
     document.querySelector('.main__mute_button').innerHTML = html;
 }
-
-const playStop = () => {
-    let enabled = myVideoStream.getVideoTracks()[0].enabled;
-    if (enabled) {
-        myVideoStream.getVideoTracks()[0].enabled = false;
-        setPlayVideo()
-    } else {
-        setStopVideo()
-        myVideoStream.getVideoTracks()[0].enabled = true;
-    }
-}
-
 
 
 const setStopVideo = () => {

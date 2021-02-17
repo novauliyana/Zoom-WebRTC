@@ -17,7 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js" defer></script>
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/c939d0e917.js"></script>
 
@@ -42,6 +42,10 @@
             object-fit: cover;
             padding: 8px;
         }
+
+        .main__videos {
+            overflow-y: scroll;
+        }
     </style>
     <script src="script.js" defer></script>
 </head>
@@ -54,9 +58,9 @@
                 <div id="video-grid">
 
                 </div>
-                <div id="capture">
-                    <video id="capt" autoplay></video>
-                </div>
+                <!-- <div id="capture">
+
+                </div> -->
             </div>
             <div class="main__controls">
                 <div class="main__controls__block">
@@ -71,7 +75,7 @@
                 </div>
 
                 <div class="main__controls__block">
-                    <div id="share_screen" class="main__controls__button">
+                    <div id="share_screen" class="main__controls__button" onclick="shareScreen()">
                         <i class="fas fa-tv"></i>
                         <span>Share Screen</span>
                     </div>
@@ -79,7 +83,7 @@
                 </div>
 
                 <div class="main__controls__block">
-                    <div onclick="leave()" class="main__controls__button">
+                    <div onclick="videoshare()" class="main__controls__button">
                         <span class="leave_meeting">Leave Meeting</span>
                     </div>
 
