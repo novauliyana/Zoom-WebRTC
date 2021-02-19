@@ -32,7 +32,7 @@ video {
     justify-content: center;
     align-items: center;
     padding: 40px;
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
 .main__controls {

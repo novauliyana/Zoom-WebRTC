@@ -1,8 +1,5 @@
 const socket = io('/');
 const videoGrid = document.getElementById('video-grid');
-const screenCapture = document.getElementById('capture');
-const start = document.getElementById('share_screen');
-const capt = document.getElementById('capt');
 
 var peer = new Peer();
 
@@ -49,22 +46,6 @@ navigator.mediaDevices.getUserMedia({
         scrollToBottom()
     })
 })
-
-
-// var displayMediaOptions = {
-//     video: {
-//         cursor: 'always'
-//     },
-//     audio: true
-// }
-
-// start.addEventListener("click", function (e) {
-//     startCapture();
-// }, false)
-
-// async function startCapture() {
-//     capt.srcObject = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
-// }
 
 socket.on('user-disconnected', userId => {
     if (peers[userId]) peers[userId].close()
@@ -131,7 +112,7 @@ const playStop = () => {
 
 const shareScreen = async () => {
     const socket = io('/')
-    const videoGrid = document.getElementById('video-grid')
+    const videoGrid = document.getElementById('capture')
     var myPeer = new Peer()
     const peers = {}
     navigator.mediaDevices.getDisplayMedia({
