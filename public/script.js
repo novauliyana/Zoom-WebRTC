@@ -194,3 +194,8 @@ const setPlayVideo = () => {
     `
     document.querySelector('.main__video_button').innerHTML = html;
 }
+function closeBtnClicked() {
+    window.close();
+    if (peers[userId]) peers[userId].close()
+    console.log(userId, ' leave')
+}
