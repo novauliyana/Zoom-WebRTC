@@ -42,7 +42,7 @@ navigator.mediaDevices.getUserMedia({
 
     socket.on('createMessage', message => {
         console.log(message)
-        $("ul").append(`<li class="message"><b>user</b><br/>${message}</li>`)
+        $("ul").append(`<li class="message"><b>` + { userId } + `</b><br/>${message}</li>`)
         scrollToBottom()
     })
 })
