@@ -29,10 +29,11 @@ video {
     flex-grow: 1;
     background-color: black;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     padding: 40px;
-    overflow-y: scroll;
+    overflow: auto;
 }
 
 .main__controls {
