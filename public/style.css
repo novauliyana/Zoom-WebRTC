@@ -66,6 +66,18 @@ video {
     cursor: pointer;
 }
 
+.main__controls__video {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 10px;
+    min-width: 80px;
+    cursor: pointer;
+    color: white;
+    list-style: none;
+}
+
 .main__controls__button i {
     font-size: 24px;
 }
