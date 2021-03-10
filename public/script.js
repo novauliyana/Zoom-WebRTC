@@ -44,9 +44,8 @@ navigator.mediaDevices.getUserMedia({
     });
 
     socket.on('createMessage', message => {
-        id = Math.floor(1E7 * Math.random()).toString(16);
         console.log(message)
-        $("ul").append(`<li class="message"><b>${id}</b><br/>${message}</li>`)
+        $("ul").append(`<li class="message"><b>User</b><br/>${message}</li>`)
         scrollToBottom()
     })
 })
