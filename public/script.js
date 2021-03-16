@@ -1,9 +1,11 @@
 const socket = io('/');
 const videoGrid = document.getElementById('video-grid');
 
-var peer = new Peer();
-
-var id = Math.floor(1E7 * Math.random()).toString(16);
+var peer = new Peer(undefined, {
+    path: '/peerjs',
+    host: '/',
+    port: '4040'
+})
 
 let screenShareStream;
 
@@ -27,7 +29,6 @@ navigator.mediaDevices.getUserMedia({
     })
 
     socket.on('user-connected', userId => {
-
         connecToNewUser(userId, stream);
         console.log('new user joined', userId)
     })
@@ -45,7 +46,7 @@ navigator.mediaDevices.getUserMedia({
 
     socket.on('createMessage', message => {
         console.log(message)
-        $("ul").append(`<li class="message"><b>User</b><br/>${message}</li>`)
+        $("ul").append(`<li class="message"><b>user</b><br/>${message}</li>`)
         scrollToBottom()
     })
 })
@@ -56,9 +57,8 @@ socket.on('user-disconnected', userId => {
 })
 
 peer.on('open', id => {
-    //id = Math.floor(1E7 * Math.random()).toString(16);
     socket.emit('join-room', ROOM_ID, id);
-    console.log('id ', id)
+    console.log('id ', id);
 })
 
 
@@ -77,13 +77,11 @@ function connecToNewUser(userId, stream) {
 }
 
 function addVideoStream(video, stream) {
-    id = Math.floor(1E7 * Math.random()).toString(16);
     video.srcObject = stream;
     video.addEventListener('loadedmetadata', () => {
         video.play();
     })
-
-    videoGrid.append(id, video);
+    videoGrid.append(video);
 }
 const scrollToBottom = () => {
     var d = $('.main__chat_window');
