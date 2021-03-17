@@ -1,11 +1,7 @@
 const socket = io('/');
 const videoGrid = document.getElementById('video-grid');
 
-var peer = new Peer(undefined, {
-    path: '/peerjs',
-    host: '/',
-    port: '4040'
-})
+var peer = new Peer()
 
 let screenShareStream;
 
