@@ -25,7 +25,8 @@ navigator.mediaDevices.getUserMedia({
     })
 
     socket.on('user-connected', userId => {
-        connecToNewUser(userId, stream);
+        setTimeout(connecToNewUser, 1000, userId, stream)
+        //connecToNewUser(userId, stream);
         console.log('new user joined', userId)
     })
 
@@ -126,7 +127,7 @@ const shareScreen = async () => {
         })
 
         socket.on('user-connected', userId => {
-            connectToNewUser(userId, stream)
+            setTimeout(connecToNewUser, 1000, userId, stream)
         })
 
 
