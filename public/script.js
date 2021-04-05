@@ -1,6 +1,8 @@
 const socket = io('/');
 const videoGrid = document.getElementById('video-grid');
 
+const user = prompt("Enter your name");
+
 var peer = new Peer()
 
 let screenShareStream;
@@ -25,8 +27,8 @@ navigator.mediaDevices.getUserMedia({
     })
 
     socket.on('user-connected', userId => {
-        setTimeout(connecToNewUser, 1000, userId, stream)
-        //connecToNewUser(userId, stream);
+        //setTimeout(connecToNewUser, 1000, userId, stream)
+        connecToNewUser(userId, stream);
         console.log('new user joined', userId)
     })
 
@@ -41,9 +43,10 @@ navigator.mediaDevices.getUserMedia({
         }
     });
 
-    socket.on('createMessage', message => {
+    socket.on('createMessage', (message, userName) => {
         console.log(message)
-        $("ul").append(`<li class="message"><b>user</b><br/>${message}</li>`)
+        $("ul").append(`<li class="message"><b>${userName === user ? "me" : userName
+            }</b><br/>${message}</li>`)
         scrollToBottom()
     })
 })
@@ -54,8 +57,9 @@ socket.on('user-disconnected', userId => {
 })
 
 peer.on('open', id => {
-    socket.emit('join-room', ROOM_ID, id);
+    socket.emit('join-room', ROOM_ID, id, user);
     console.log('id ', id);
+    console.log('user', user)
 })
 
 
@@ -112,7 +116,8 @@ const playStop = () => {
 
 const shareScreen = async () => {
     const socket = io('/')
-    const videoGrid = document.getElementById('capture')
+    //const videoGrid = document.getElementById('capture')
+    const videoGrid = document.getElementById('video-grid');
     var myPeer = new Peer()
     const peers = {}
     navigator.mediaDevices.getDisplayMedia({
@@ -121,15 +126,16 @@ const shareScreen = async () => {
     }).then(stream => {
         myPeer.on('call', call => {
             call.answer(stream)
+            //const video2 = document.createElement('video')
             call.on('stream', userVideoStream => {
-                addVideoStream(userVideoStream)
+                addVideoStream(video2, userVideoStream)
             })
         })
 
         socket.on('user-connected', userId => {
-            setTimeout(connecToNewUser, 1000, userId, stream)
+            //setTimeout(connecToNewUser, 1000, userId, stream)
+            connecToNewUser(userId, stream);
         })
-
 
     })
 
@@ -140,18 +146,6 @@ const shareScreen = async () => {
     myPeer.on('open', id => {
         socket.emit('join-room', ROOM_ID, id)
     })
-
-    function connectToNewUser(userId, stream) {
-
-        const call = myPeer.call(userId, stream)
-        const video2 = document.createElement('video')
-
-        call.on('close', () => {
-            video2.remove()
-        })
-
-        peers[userId] = call
-    }
 
     function addVideoStream(video2, stream) {
         video2.srcObject = stream
