@@ -3,6 +3,7 @@ const videoGrid = document.getElementById('video-grid');
 
 const user = prompt("Enter your name");
 
+
 var peer = new Peer()
 
 let screenShareStream;
@@ -94,6 +95,10 @@ const muteUnmute = () => {
     const enabled = myVideoStream.getAudioTracks()[0].enabled;
     if (enabled) {
         myVideoStream.getAudioTracks()[0].enabled = false;
+        const html = `
+    <i class="fas fa-volume-up"></i
+    
+    `
         setUnmuteButton();
     } else {
         setMuteButton();
@@ -189,7 +194,10 @@ const setPlayVideo = () => {
     document.querySelector('.main__video_button').innerHTML = html;
 }
 function closeBtnClicked() {
-    window.close();
-    if (peers[userId]) peers[userId].close()
-    console.log(userId, ' leave')
+    const konfirm = confirm("Apakah kamu yakin akan meninggalkan room ini?");
+    if (konfirm) {
+        window.close();
+        if (peers[userId]) peers[userId].close()
+        console.log(userId, ' leave')
+    }
 }
